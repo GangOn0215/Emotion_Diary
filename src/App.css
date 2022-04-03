@@ -193,3 +193,11 @@ header button {
 .input-daily-date {
   margin-left: 10px;
 }
+.react-datepicker-wrapper {
+  text-align: center;
+  height: 100%;
+}
+.example-custom-input {
+  font-size: 1em;
+  height: 35px;
+}
