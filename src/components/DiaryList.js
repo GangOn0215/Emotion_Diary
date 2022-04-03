@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {useNavigate} from 'react-router-dom';
 import DiaryItem from "./DiaryItem";
 import MyButton from './MyButton';
@@ -9,8 +9,8 @@ const ControlMenu = ({ value, onChange, optionList, callback }) => {
       className="ControlMenu" 
       value={value} 
       onChange={(e) => {
-        if(['daily', 'weekly', 'monthly'].includes(value)) {
-          callback(value);
+        if(['daily', 'weekly', 'monthly'].includes(e.target.value)) {
+          callback(e.target.value);
         }
 
         onChange(e.target.value);
@@ -45,16 +45,15 @@ const filterOptionList = [
 ];
 
 const DiaryList = ({ diaryList, periodicity, setPeriodicity }) => {
-  console.log(diaryList);
+
+  useEffect(() => {
+    console.log(diaryList);
+  }, [diaryList])
+
   const navigate = useNavigate();
-  // const [periodicity, setPeriodicity] = useState("weekly");
+  const [localPeriodicity, setLocalPeriodicity] = useState(periodicity);
   const [sortType, setSortType]       = useState("latest");
   const [filter, setFilter]           = useState("all");
-
-  // const onChangePeriodicity = () => {
-  //   console.log('break');
-  //   setTogglePeriodicity(!togglePeriodicity);
-  // }
 
   const getProcessDiaryList = () => {
     const filterCallBack = (item) => {
@@ -73,8 +72,7 @@ const DiaryList = ({ diaryList, periodicity, setPeriodicity }) => {
       }
     }
 
-    // const copyList = JSON.parse(JSON.stringify(diaryList));
-    const copyList = [...diaryList]; // immutability
+    const copyList = JSON.parse(JSON.stringify(diaryList));
 
     const filteredList = (filter === 'all') ? copyList : copyList.filter((item)=> filterCallBack(item));
     const sortedList = filteredList.sort(compare);
@@ -87,10 +85,10 @@ const DiaryList = ({ diaryList, periodicity, setPeriodicity }) => {
       <div className="menu-wrapper">
         <div className="left-col">
           <ControlMenu 
-            value={periodicity}
-            onChange={setPeriodicity}
+            value={localPeriodicity}
+            onChange={setLocalPeriodicity}
             optionList={periodicityOptionList}
-            // callback={onChangePeriodicity}
+            callback={setPeriodicity}
           />
           <ControlMenu 
             value={sortType} 

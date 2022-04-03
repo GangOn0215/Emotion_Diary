@@ -189,3 +189,7 @@ header button {
 .DiaryItem .btn-wrapper {
   min-width: 70px;
 }
+
+.input-daily-date {
+  margin-left: 10px;
+}

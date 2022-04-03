@@ -8,6 +8,64 @@ import DiaryList from "../components/DiaryList";
 /* Context */
 import { DiaryStateContext } from "../App";
 
+// increase, decrease
+const indecreasePeriodicity = (periodicity, curDate, setCurDate) => {
+  const switchPeriodicity = periodicity;
+  let increase = null;
+  let decrease = null;
+
+  switch(switchPeriodicity) {
+    case "daily":
+      increase = () => setCurDate(new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() + 1));
+      decrease = () => setCurDate(new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1));
+      break;
+    case "weekly":
+      increase = () => setCurDate(new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() + 7));
+      decrease = () => setCurDate(new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 7));
+      break;
+    case "monthly":
+      increase = () => setCurDate(new Date(curDate.getFullYear(), curDate.getMonth() + 1));
+      decrease = () => setCurDate(new Date(curDate.getFullYear(), curDate.getMonth() - 1));
+      break;
+    default:
+      break;
+  }
+  
+  return { increase, decrease };
+}
+
+const SetHeader = ({periodicity, headTextOBJ, curDate, setCurDate}) => {
+  let headText = null;
+
+  const {increase, decrease} = indecreasePeriodicity(periodicity, curDate, setCurDate);
+
+  switch(periodicity) {
+    case "diary":
+      headText = headTextOBJ.dailyText;
+      break;
+    case "weekly":
+      headText = headTextOBJ.weeklyText;
+      break;
+    case "monthly":
+      headText = headTextOBJ.monthlyText;
+      break;
+    default: 
+      headText = headTextOBJ.dailyText;
+      break;
+  }
+
+  return (
+    <MyHeader 
+      headText={headText} 
+      leftChild={<MyButton text={"<"} onClick={decrease}/>}
+      rightChild={<MyButton text={">"} onClick={increase}/>}
+      periodicity={periodicity}
+      curDate={curDate}
+      setCurDate={setCurDate}
+    />
+  );
+}
+
 const Home = () => {
   const diaryLists = useContext(DiaryStateContext);
 
@@ -17,24 +75,26 @@ const Home = () => {
     first: null,
     last: null
   });
-  // true: weekly false: monthly
-  const [periodicity, setPeriodicity] = useState("daily");
-  const [togglePeriodicity, setTogglePeriodicity] = useState(true);
 
-  const MonthlyText = `${curDate.getFullYear()} 년 ${curDate.getMonth() + 1} 월`;
-  let weeklyText = weeklyDate.first ?
-    (`${weeklyDate.first.getMonth() + 1} 월 ${weeklyDate.first.getDate()} 일 ~ ${weeklyDate.last.getMonth() + 1}  월 ${weeklyDate.last.getDate()} 일` ) : null;
+  const [periodicity, setPeriodicity] = useState("daily");
+  const headTextOBJ = {
+    dailyText: `${curDate.getMonth() + 1} 월 ${curDate.getDate()} 일`,
+    weeklyText: weeklyDate.first ?
+    (`${weeklyDate.first.getMonth() + 1} 월 ${weeklyDate.first.getDate()} 일 ~ ${weeklyDate.last.getMonth() + 1}  월 ${weeklyDate.last.getDate()} 일` ) : null,
+    monthlyText: `${curDate.getFullYear()} 년 ${curDate.getMonth() + 1} 월`,
+  }
 
   const getDailyFirstLastTime = () => {
-    const dailyDate  = curDate;
-    let   firstTime  = dailyDate.getTime();
-    let   lastDay    = new Date(dailyDate.getFullYear(), dailyDate.getMonth(), dailyDate.getDate, 23, 59, 59).getTime();
+    const dailyDate = curDate;
+    let   firstDay  = new Date(dailyDate.getFullYear(), dailyDate.getMonth(), dailyDate.getDate(), 0, 0, 0);
+    let   lastDay   = new Date(dailyDate.getFullYear(), dailyDate.getMonth(), dailyDate.getDate(), 23, 59, 59).getTime();
     
-    return {firstTime, lastDay};
+    return {firstDay, lastDay};
   } 
 
   // Start Monday
   const getWeeklyFirstLastDay = (startMonday = false) => {
+    console.log('break');
     const todayDate = curDate;
     let firstDay = null;
     let lastDay = null;
@@ -86,83 +146,56 @@ const Home = () => {
     return { firstDay, lastDay };
   };
 
-  const getFirstLastDay = (periodicity) => {
-    switch(periodicity) {
-      case "monthly":
-        return getMonthlyFirstLastDay();
-      case "weekly":
-        return getWeeklyFirstLastDay();
-      case "daily":
-        return getDailyFirstLastTime();
-      default:
-        return getMonthlyFirstLastDay();
-    }
+  const handleChangePeriodicity = (changePeriodicity) => {
+    setCurDate(new Date(2022, 2, 31, 15, 30, 0));
+    setPeriodicity(changePeriodicity);
   }
-
-  useEffect(() => {
-  });
 
   useEffect(() => {
     if (diaryLists.length < 1) {
       return;
     }
 
-    const { firstDay, lastDay } = getFirstLastDay(periodicity);
+    let firstLastCallback = null;
+
+    switch(periodicity) {
+      case "daily":
+        firstLastCallback = getDailyFirstLastTime;
+        break;
+      case "weekly":
+        firstLastCallback = getWeeklyFirstLastDay;
+        break;
+      case "monthly":
+        firstLastCallback = getMonthlyFirstLastDay;
+        break;
+      default:
+        firstLastCallback = getMonthlyFirstLastDay;
+        break;
+    }
+
+    // const { first, last } = firstLastCallback();
+    const {firstDay, lastDay} = firstLastCallback();
 
     setData(
       diaryLists.filter((item) => firstDay <= item.date && item.date <= lastDay)
     );
-  }, [diaryLists, curDate]);
 
-  // 처음 Mount 할때 실행이 됩니다. []
-  useEffect(() => {
-    // console.log(data);
-  }, [data]);
-
-  const increaseMonth = () => {
-    setCurDate(new Date(curDate.getFullYear(), curDate.getMonth() + 1));
-  };
-
-  const decreaseMonth = () => {
-    setCurDate(new Date(curDate.getFullYear(), curDate.getMonth() - 1));
-  };
-
-  const increaseWeekly = () => {
-    setCurDate(
-      new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() + 7)
-    );
-  };
-
-  const decreaseWeekly = () => {
-    setCurDate(
-      new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 7)
-    );
-  };
+    console.log(diaryLists.filter((item) => firstDay <= item.date && item.date <= lastDay))
+  }, [diaryLists, curDate, periodicity]);
 
   return (
     <div className="Diary">
-      { togglePeriodicity ? 
-        <>
-          <MyHeader
-            headText={weeklyText}
-            leftChild={<MyButton text={"<"} onClick={decreaseWeekly} />}
-            rightChild={<MyButton text={">"} onClick={increaseWeekly} />}
-          />
-        </>
-        :
-        <>
-          <MyHeader
-            headText={MonthlyText}
-            leftChild={<MyButton text={"<"} onClick={decreaseMonth} />}
-            rightChild={<MyButton text={">"} onClick={increaseMonth} />}
-          />
-        </>
+      <SetHeader 
+        periodicity={periodicity} 
+        headTextOBJ={headTextOBJ} 
+        curDate={curDate} 
+        setCurDate={setCurDate}
+      />
 
-      }
       <DiaryList 
         diaryList={data} 
-        togglePeriodicity={togglePeriodicity}
-        setTogglePeriodicity={setTogglePeriodicity}
+        periodicity={periodicity}
+        setPeriodicity={handleChangePeriodicity}
       />
     </div>
   );
