@@ -18,11 +18,20 @@ const Home = () => {
     last: null
   });
   // true: weekly false: monthly
+  const [periodicity, setPeriodicity] = useState("daily");
   const [togglePeriodicity, setTogglePeriodicity] = useState(true);
 
   const MonthlyText = `${curDate.getFullYear()} 년 ${curDate.getMonth() + 1} 월`;
   let weeklyText = weeklyDate.first ?
     (`${weeklyDate.first.getMonth() + 1} 월 ${weeklyDate.first.getDate()} 일 ~ ${weeklyDate.last.getMonth() + 1}  월 ${weeklyDate.last.getDate()} 일` ) : null;
+
+  const getDailyFirstLastTime = () => {
+    const dailyDate  = curDate;
+    let   firstTime  = dailyDate.getTime();
+    let   lastDay    = new Date(dailyDate.getFullYear(), dailyDate.getMonth(), dailyDate.getDate, 23, 59, 59).getTime();
+    
+    return {firstTime, lastDay};
+  } 
 
   // Start Monday
   const getWeeklyFirstLastDay = (startMonday = false) => {
@@ -48,7 +57,7 @@ const Home = () => {
       23,
       59,
       59
-    );
+    ).getTime();
 
     setWeeklyDate({
       first: new Date(firstDay),
@@ -77,6 +86,19 @@ const Home = () => {
     return { firstDay, lastDay };
   };
 
+  const getFirstLastDay = (periodicity) => {
+    switch(periodicity) {
+      case "monthly":
+        return getMonthlyFirstLastDay();
+      case "weekly":
+        return getWeeklyFirstLastDay();
+      case "daily":
+        return getDailyFirstLastTime();
+      default:
+        return getMonthlyFirstLastDay();
+    }
+  }
+
   useEffect(() => {
   });
 
@@ -85,7 +107,7 @@ const Home = () => {
       return;
     }
 
-    const { firstDay, lastDay } = togglePeriodicity ? getWeeklyFirstLastDay() : getMonthlyFirstLastDay()
+    const { firstDay, lastDay } = getFirstLastDay(periodicity);
 
     setData(
       diaryLists.filter((item) => firstDay <= item.date && item.date <= lastDay)
