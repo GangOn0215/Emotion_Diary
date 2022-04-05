@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from 'react';
+import DiaryEditor from '../components/DiaryEditor';
 
 const New = () => {
   return (
-    <div className="Diary">
-      <h1>New</h1>
-      <p>this New page</p>
+    <div className='Diary'>
+      <DiaryEditor />
     </div>
   );
 };

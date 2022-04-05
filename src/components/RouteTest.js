@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 const RouteTest = () => {
   return (
     <>
-      <Link to={"/"}>HOME</Link>
+      <Link to={'/'}>HOME</Link>
       <br />
-      <Link to={"/diary"}>DIARY</Link>
+      <Link to={'/diary'}>DIARY</Link>
       <br />
-      <Link to={"/new"}>NEW</Link>
+      <Link to={'/new'}>NEW</Link>
       <br />
-      <Link to={"/edit"}>EDIT</Link>
+      <Link to={'/edit'}>EDIT</Link>
     </>
   );
 };

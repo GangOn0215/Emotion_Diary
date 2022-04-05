@@ -25,23 +25,17 @@ const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
 ));
 
 const MyHeader = ({ headText, leftChild, rightChild, periodicity, curDate, onChangeDate }) => {
-  // const [localCurDate, setLocalCurDate] = useState(new Date(curDate));
-
   const [startDate, setStartDate] = useState(new Date(curDate));
 
   useEffect(() => {
     setStartDate(new Date(curDate));
   }, [curDate]);
-  // setCurDate(startDate);
-  // console.log(getStringDate(localCurDate));
-
-  // `${curDate.getFullYear()}-${curDate.getMonth() + 1}-${curDate.getDate()}`
 
   return (
     <header>
       <div className='head-btn-left'>{leftChild}</div>
       <div className='head-text'>
-        {periodicity === `daily` ? (
+        {periodicity === 'daily' || !['New Diary'].includes(headText) ? (
           <DatePicker
             selected={startDate}
             onChange={(date) => {
