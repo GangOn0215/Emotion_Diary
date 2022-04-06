@@ -229,6 +229,29 @@ header button {
 	grid-template-columns: repeat(5, auto);
 	gap: 2%;
 }
+
+.DiaryEditor textarea {
+	font-family: "Nanum Pen Script";
+	font-size: 20px;
+
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 200px;
+	resize: vertical;
+
+	border: none;
+	border-radius: 5px;
+	background-color: #ececec;
+
+	padding: 20px;
+}
+
+.DiaryEditor .control-box {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 /* Emotion Item */
 
 .EmotionItem {
@@ -250,4 +273,28 @@ header button {
 
 .EmotionItem span {
 	font-size: 18px;
+}
+
+.EmotionItem-off {
+	background-color: #ececec;
+}
+.EmotionItem-on-1 {
+	background-color: #64c964;
+	color: white;
+}
+.EmotionItem-on-2 {
+	background-color: #9dd772;
+	color: white;
+}
+.EmotionItem-on-3 {
+	background-color: #fdce17;
+	color: white;
+}
+.EmotionItem-on-4 {
+	background-color: #fd8446;
+	color: white;
+}
+.EmotionItem-on-5 {
+	background-color: #fd565f;
+	color: white;
 }

@@ -11,7 +11,7 @@ const Home = () => {
   const diaryLists = useContext(DiaryStateContext);
 
   const [data, setData] = useState([]);
-  const [curDate, setCurDate] = useState(new Date(2022, 2, 31, 15, 30, 0));
+  const [curDate, setCurDate] = useState(new Date());
   const [weeklyDate, setWeeklyDate] = useState({
     first: null,
     last: null,
@@ -101,7 +101,7 @@ const Home = () => {
   };
 
   const handleChangePeriodicity = (changePeriodicity) => {
-    setCurDate(new Date(2022, 2, 31, 15, 30, 0));
+    setCurDate(new Date());
     setPeriodicity(changePeriodicity);
   };
 
@@ -137,6 +137,7 @@ const Home = () => {
     setData(diaryLists.filter((item) => firstDay <= item.date && item.date <= lastDay));
 
     console.log(diaryLists.filter((item) => firstDay <= item.date && item.date <= lastDay));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diaryLists, curDate, periodicity]);
 
   return (
