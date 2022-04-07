@@ -1,26 +1,30 @@
-import React from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { DiaryStateContext } from '../App';
+import { useNavigate, useParams } from 'react-router-dom';
+import DiaryEditor from '../components/DiaryEditor';
 
 const Edit = () => {
-  // React Router Link 대신 사용할 수 있는 navigate 함수 > 강제로 이동시킬때 주로 사용됩니다.
-  // [ example ] Login 하지 않은 유저가 my profile url로 접근을 할때
+  const diaryList = useContext(DiaryStateContext);
+  const [originalData, setOriginalData] = useState();
   const navigate = useNavigate();
-  // url에서 'https://localhost:5000/edit?[id=10&mode=kr] Query Sting 을 받아올수 있는 함수
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { id } = useParams();
 
-  const id = searchParams.get('id');
-  console.log('id: ', id);
+  useEffect(() => {
+    const targetDiary = diaryList.find((item) => parseInt(item.id) === parseInt(id));
 
-  const mode = searchParams.get('mode');
-  console.log('mode: ', mode);
+    if (diaryList.length >= 1) {
+      // targetDiary 에 데이터가 없다면 즉 edit을 할 수 없는 상태라면
+      if (!targetDiary) {
+        navigate('/', { replace: true });
+      }
+
+      setOriginalData(targetDiary);
+    }
+  }, [diaryList, id]);
 
   return (
     <div className='Diary'>
-      <h1>Edit</h1>
-      <p>this Edit page</p>
-      <button onClick={() => setSearchParams({ who: 'winterload' })}>Change QS</button>
-      <button onClick={() => navigate('/')}>Home</button>
-      <button onClick={() => navigate(-1)}>back</button>
+      {originalData && <DiaryEditor isEdit={true} originalData={originalData} />}
     </div>
   );
 };

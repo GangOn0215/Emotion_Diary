@@ -2,22 +2,6 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const getStringDate = (date) => {
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-
-  if (month < 10) {
-    month = `0${month}`;
-  }
-
-  if (day < 10) {
-    day = `0${day}`;
-  }
-
-  return `${year}-${month}-${day}`;
-};
-
 const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
   <button className='example-custom-input' onClick={onClick} ref={ref}>
     {value}
@@ -34,8 +18,9 @@ const MyHeader = ({ headText, leftChild, rightChild, periodicity, curDate, onCha
   return (
     <header>
       <div className='head-btn-left'>{leftChild}</div>
+
       <div className='head-text'>
-        {periodicity === 'daily' || !['New Diary'].includes(headText) ? (
+        {periodicity === 'daily' || !['New Diary', 'Edit Diary'].includes(headText) ? (
           <DatePicker
             selected={startDate}
             onChange={(date) => {

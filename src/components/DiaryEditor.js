@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { DiaryDispatchContext } from '../App';
@@ -51,12 +51,22 @@ const getStringDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-const DiaryEditor = () => {
-  const { onCreate } = useContext(DiaryDispatchContext);
+const DiaryEditor = ({ isEdit, originalData }) => {
+  const { onCreate, onEdit } = useContext(DiaryDispatchContext);
   const contentRef = useRef();
   const [content, setContent] = useState('');
   const [emotion, setEmotion] = useState(3);
   const [date, setDate] = useState(getStringDate(new Date()));
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isEdit) {
+      setContent(originalData.content);
+      setEmotion(originalData.emotion);
+      setDate(getStringDate(new Date(parseInt(originalData.date))));
+    }
+  }, [isEdit, originalData]);
 
   const handleClickEmote = (emotion) => {
     setEmotion(emotion);
@@ -68,16 +78,16 @@ const DiaryEditor = () => {
       return;
     }
 
-    onCreate(date, content, emotion);
+    if (isEdit) onEdit(originalData.id, date, content, emotion);
+    else onCreate(date, content, emotion);
+
     navigate('/', { replace: true });
   };
-
-  const navigate = useNavigate();
 
   return (
     <div className='DiaryEditor'>
       <MyHeader
-        headText={'New Diary'}
+        headText={isEdit ? 'Edit Diary' : 'New Diary'}
         leftChild={<MyButton text={'< 뒤로가기'} onClick={() => navigate(-1)} />}
       />
       <div>
@@ -119,7 +129,7 @@ const DiaryEditor = () => {
         <section>
           <div className='control-box'>
             <MyButton text={'Cancle'} onClick={() => navigate(-1)} />
-            <MyButton text={'작성완료'} type={'positive'} onClick={handleSubmit} />
+            <MyButton text={'작성 완료'} type={'positive'} onClick={handleSubmit} />
           </div>
         </section>
       </div>

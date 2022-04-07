@@ -131,7 +131,6 @@ const Home = () => {
         break;
     }
 
-    // const { first, last } = firstLastCallback();
     const { firstDay, lastDay } = firstLastCallback();
 
     setData(diaryLists.filter((item) => firstDay <= item.date && item.date <= lastDay));

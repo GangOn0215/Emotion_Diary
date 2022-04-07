@@ -21,7 +21,7 @@ const reducer = (state, action) => {
       newState = [action.data, ...state];
       break;
     case 'EDIT':
-      newState = state.map((item) => (item.id === action.targetId ? { ...action.data } : item));
+      newState = state.map((item) => (item.id === action.data.id ? { ...action.data } : item));
       break;
     case 'REMOVE':
       newState = state.filter((item) => item.id !== action.targetId);
@@ -77,7 +77,7 @@ const dummyData = [
 
 function App() {
   const [data, Dispatch] = useReducer(reducer, []);
-  const dataId = useRef(0);
+  let dataId = useRef(0);
 
   const getData = () => {
     Dispatch({ type: 'INIT', data: dummyData });
@@ -85,9 +85,11 @@ function App() {
 
   useEffect(() => {
     getData();
+    dataId.current = data.length;
   }, []);
 
   const onCreate = (date, content, emotion) => {
+    debugger;
     Dispatch({
       type: 'CREATE',
       data: {
@@ -104,7 +106,7 @@ function App() {
       type: 'EDIT',
       data: {
         id: targetId,
-        date: date,
+        date: new Date(date).getTime(),
         content,
         emotion,
       },
@@ -127,7 +129,7 @@ function App() {
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/new' element={<New />} />
-              <Route path='/edit' element={<Edit />} />
+              <Route path='/edit/:id' element={<Edit />} />
               <Route path='/diary/:id' element={<Diary />} />
             </Routes>
           </div>
