@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { DiaryStateContext } from '../App';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import MyHeader from '../components/MyHeader';
-import MyButton from '../components/MyButton';
+import MyHeader from '../components/common/MyHeader';
+import MyButton from '../components/common/MyButton';
 
 import { getStringDate } from '../util/date';
 import { emotionList } from '../util/emotion';

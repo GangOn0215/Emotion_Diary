@@ -1,5 +1,5 @@
-import MyHeader from './MyHeader';
-import MyButton from './MyButton';
+import MyHeader from '../common/MyHeader';
+import MyButton from '../common/MyButton';
 
 // increase, decrease
 const indecreasePeriodicity = (periodicity, curDate, onChangeDate) => {

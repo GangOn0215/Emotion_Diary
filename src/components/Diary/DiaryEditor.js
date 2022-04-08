@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { DiaryDispatchContext } from '../App';
+import { DiaryDispatchContext } from '../../App';
 
 // components
-import MyHeader from '../components/MyHeader';
-import MyButton from '../components/MyButton';
-import EmotionItem from './EmotionItem';
+import MyHeader from '../common/MyHeader';
+import MyButton from '../common/MyButton';
+import EmotionItem from '../Sub/EmotionItem';
 
-import { getStringDate } from '../util/date';
-import { emotionList } from '../util/emotion';
+import { getStringDate } from '../../util/date';
+import { emotionList } from '../../util/emotion';
 
 const DiaryEditor = ({ isEdit, originalData }) => {
   const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);

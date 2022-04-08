@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DiaryEditor from '../components/DiaryEditor';
+import DiaryEditor from '../components/Diary/DiaryEditor';
 
 const New = () => {
   return (

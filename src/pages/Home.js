@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 /* Components */
-import SetHeader from '../components/SetHeader';
-import DiaryList from '../components/DiaryList';
+import SetHeader from '../components/Sub/SetHeader';
+import DiaryList from '../components/Diary/DiaryList';
 
 /* Context */
 import { DiaryStateContext } from '../App';
@@ -18,6 +18,7 @@ const Home = () => {
   });
 
   const [periodicity, setPeriodicity] = useState('daily');
+
   const headTextOBJ = {
     dailyText: `${curDate.getMonth() + 1} 월 ${curDate.getDate()} 일`,
     weeklyText: weeklyDate.first
