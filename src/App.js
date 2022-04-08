@@ -30,6 +30,7 @@ const reducer = (state, action) => {
       return state;
   }
 
+  // localStorage.setItem('diary', JSON.stringify(newState));
   return newState;
 };
 
@@ -76,24 +77,33 @@ const dummyData = [
 ];
 
 function App() {
+  useEffect(() => {
+    // localStorage.setItem('item1', 10);
+    // localStorage.setItem('item2', '20');
+    // localStorage.setItem('item3', JSON.stringify({ value: 30 }));
+    const item1 = localStorage.getItem('item1');
+    const item2 = localStorage.getItem('item2');
+    const item3 = JSON.parse(localStorage.getItem('item3'));
+
+    console.log(item1, item2, item3);
+  }, []);
   const [data, Dispatch] = useReducer(reducer, []);
-  let dataId = useRef(0);
+  let dataId = useRef(6);
 
   const getData = () => {
+    // const data = localStorage.getItem();
     Dispatch({ type: 'INIT', data: dummyData });
   };
 
   useEffect(() => {
     getData();
-    dataId.current = data.length;
   }, []);
 
   const onCreate = (date, content, emotion) => {
-    debugger;
     Dispatch({
       type: 'CREATE',
       data: {
-        id: dataId.current++,
+        id: ++dataId.current,
         date: new Date(date).getTime(),
         content,
         emotion,

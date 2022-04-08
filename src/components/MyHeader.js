@@ -8,7 +8,14 @@ const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
   </button>
 ));
 
-const MyHeader = ({ headText, leftChild, rightChild, periodicity, curDate, onChangeDate }) => {
+const MyHeader = ({
+  headText,
+  leftChild,
+  rightChild,
+  periodicity = null,
+  curDate,
+  onChangeDate,
+}) => {
   const [startDate, setStartDate] = useState(new Date(curDate));
 
   useEffect(() => {
@@ -20,7 +27,7 @@ const MyHeader = ({ headText, leftChild, rightChild, periodicity, curDate, onCha
       <div className='head-btn-left'>{leftChild}</div>
 
       <div className='head-text'>
-        {periodicity === 'daily' || !['New Diary', 'Edit Diary'].includes(headText) ? (
+        {periodicity === 'daily' ? (
           <DatePicker
             selected={startDate}
             onChange={(date) => {
