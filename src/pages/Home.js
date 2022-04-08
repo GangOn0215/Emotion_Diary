@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 /* Components */
 import SetHeader from '../components/SetHeader';
@@ -100,10 +100,10 @@ const Home = () => {
     return { firstDay, lastDay };
   };
 
-  const handleChangePeriodicity = (changePeriodicity) => {
+  const handleChangePeriodicity = useCallback((changePeriodicity) => {
     setCurDate(new Date());
     setPeriodicity(changePeriodicity);
-  };
+  }, []);
 
   const onChangeDate = (newDate) => {
     setCurDate(newDate);

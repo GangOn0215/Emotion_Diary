@@ -3,7 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import DiaryItem from './DiaryItem';
 import MyButton from './MyButton';
 
-const ControlMenu = ({ value, onChange, optionList, callback }) => {
+// onChange 를 useCallback으로 감싸지 않아도 최적화가 되는 이유는 useState에서 데이터 설정을 할때
+// useCallback 이 되어있는 상태로 나오게 됩니다.
+const ControlMenu = React.memo(({ value, onChange, optionList, callback }) => {
+  useEffect(() => {
+    console.log('Control Menu');
+  });
   return (
     <select
       className='ControlMenu'
@@ -22,7 +27,7 @@ const ControlMenu = ({ value, onChange, optionList, callback }) => {
       ))}
     </select>
   );
-};
+});
 
 // periodicity: 주기적 일정한 간격
 // daily, weekly, monthly, yearly

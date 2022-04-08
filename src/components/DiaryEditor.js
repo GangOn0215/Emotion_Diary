@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { DiaryDispatchContext } from '../App';
@@ -28,9 +28,9 @@ const DiaryEditor = ({ isEdit, originalData }) => {
     }
   }, [isEdit, originalData]);
 
-  const handleClickEmote = (emotion) => {
+  const handleClickEmote = useCallback((emotion) => {
     setEmotion(emotion);
-  };
+  }, []);
 
   const handleSubmit = () => {
     if (content.length < 1) {
@@ -51,6 +51,7 @@ const DiaryEditor = ({ isEdit, originalData }) => {
   };
   return (
     <div className='DiaryEditor'>
+      {/* Header */}
       <MyHeader
         headText={isEdit ? 'Edit Diary' : 'New Diary'}
         leftChild={<MyButton text={'< 뒤로가기'} onClick={() => navigate(-1)} />}
@@ -58,7 +59,8 @@ const DiaryEditor = ({ isEdit, originalData }) => {
           isEdit && <MyButton text={'삭제하기'} type={'negative'} onClick={handleRemove} />
         }
       />
-      <div>
+      <article>
+        {/* Today Date */}
         <section>
           <h4>오늘은 언제인가요?</h4>
           <div className='input-box'>
@@ -70,6 +72,7 @@ const DiaryEditor = ({ isEdit, originalData }) => {
             />
           </div>
         </section>
+        {/* Today Emotion */}
         <section>
           <h4>오늘의 감정</h4>
           <div className='input-box emotion-list-wrapper'>
@@ -83,6 +86,7 @@ const DiaryEditor = ({ isEdit, originalData }) => {
             ))}
           </div>
         </section>
+        {/* Today Diary Content */}
         <section>
           <h4>오늘의 일기</h4>
           <div className='input-box text-wrpper'>
@@ -94,13 +98,14 @@ const DiaryEditor = ({ isEdit, originalData }) => {
             />
           </div>
         </section>
+        {/* Control-Box Buttons*/}
         <section>
           <div className='control-box'>
             <MyButton text={'Cancle'} onClick={() => navigate(-1)} />
             <MyButton text={'작성 완료'} type={'positive'} onClick={handleSubmit} />
           </div>
         </section>
-      </div>
+      </article>
     </div>
   );
 };
