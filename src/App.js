@@ -90,7 +90,7 @@ function App() {
   return (
     <DiaryStateContext.Provider value={data}>
       <DiaryDispatchContext.Provider value={memoDispatchs}>
-        <BrowserRouter basename='Emotion_Diary'>
+        <BrowserRouter basename='/Emotion_Diary/'>
           <div className='App'>
             <Routes>
               <Route path='/' element={<Home />} />
