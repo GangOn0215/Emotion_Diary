@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useRef, useEffect, useMemo, useReducer } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 // Pages
 import Home from './pages/Home';
@@ -90,7 +90,7 @@ function App() {
   return (
     <DiaryStateContext.Provider value={data}>
       <DiaryDispatchContext.Provider value={memoDispatchs}>
-        <BrowserRouter>
+        <HashRouter>
           <div className='App'>
             <Routes>
               <Route path='/' element={<Home />} />
@@ -99,7 +99,7 @@ function App() {
               <Route path='/diary/:id' element={<Diary />} />
             </Routes>
           </div>
-        </BrowserRouter>
+        </HashRouter>
       </DiaryDispatchContext.Provider>
     </DiaryStateContext.Provider>
   );
