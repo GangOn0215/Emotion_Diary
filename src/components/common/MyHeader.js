@@ -34,7 +34,7 @@ const MyHeader = ({
               setStartDate(date);
               onChangeDate(date);
             }}
-            customInput={<ExampleCustomInput />}
+            className='date-picker'
           />
         ) : (
           headText

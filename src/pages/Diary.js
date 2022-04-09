@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { DiaryStateContext } from '../App';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DiaryStateContext } from '../App';
 
 import MyHeader from '../components/common/MyHeader';
 import MyButton from '../components/common/MyButton';
@@ -14,7 +14,10 @@ const Diary = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  console.log(diaryList.find((item) => parseInt(item.id) === parseInt(id)));
+  useEffect(() => {
+    const titleElement = document.getElementsByTagName('title')[0];
+    titleElement.innerHTML = `${id}번 일기`;
+  }, []);
 
   useEffect(() => {
     const targetDiary = diaryList.find((item) => parseInt(item.id) === parseInt(id));
